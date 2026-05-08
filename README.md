@@ -50,6 +50,33 @@ npm run dev
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:5000`
 
+### 4) Deploy full stack to Vercel
+
+Deploy backend first from `server` directory:
+
+```bash
+npx vercel
+```
+
+Set backend environment variables in Vercel project settings:
+
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL`
+- `WHISPER_MODEL`
+- `ELEVENLABS_API_KEY`
+- `ELEVENLABS_VOICE_ID`
+- `CLIENT_ORIGIN` (set to your frontend Vercel domain)
+
+Then deploy frontend from `client` directory:
+
+```bash
+npx vercel
+```
+
+Set frontend environment variable:
+
+- `VITE_API_BASE_URL` (set to backend Vercel URL, e.g. `https://your-backend.vercel.app`)
+
 ## API
 
 ### `POST /api/voice/process`
