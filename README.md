@@ -50,53 +50,6 @@ npm run dev
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:5000`
 
-### 4) Deploy full stack to Vercel
-
-Deploy backend first from `server` directory:
-
-```bash
-npx vercel
-```
-
-Set backend environment variables in Vercel project settings:
-
-- `OPENAI_API_KEY`
-- `OPENAI_MODEL`
-- `WHISPER_MODEL`
-- `ELEVENLABS_API_KEY`
-- `ELEVENLABS_VOICE_ID`
-- `CLIENT_ORIGIN` (set to your frontend Vercel domain)
-
-Then deploy frontend from `client` directory:
-
-```bash
-npx vercel
-```
-
-Set frontend environment variable:
-
-- `VITE_API_BASE_URL` (set to backend Vercel URL, e.g. `https://your-backend.vercel.app`)
-
-## API
-
-### `POST /api/voice/process`
-
-Multipart form-data:
-
-- `audio`: recorded audio file
-
-Response:
-
-```json
-{
-  "transcript": "user speech text",
-  "replyText": "assistant response",
-  "audioBase64": "base64-encoded-audio-mpeg",
-  "mimeType": "audio/mpeg"
-}
-```
-
-
 ## Goal
 
 This project demonstrates end-to-end voice AI orchestration:
@@ -106,3 +59,34 @@ This project demonstrates end-to-end voice AI orchestration:
 - LLM response generation
 - Text-to-speech synthesis
 - Audio playback UX
+
+## Mermaid diagram
+
+```mermaid
+flowchart LR
+  subgraph client [Client]
+    UI[React UI]
+    Hook[Voice session hook]
+    APIc[API client]
+    UI --> Hook
+    Hook --> APIc
+  end
+
+  subgraph server [Server]
+    R[routes]
+    C[voice controller]
+    S[voice pipeline service]
+    W[Whisper service]
+    G[GPT service]
+    T[TTS service]
+    R --> C
+    C --> S
+    S --> W
+    S --> G
+    S --> T
+  end
+
+  APIc -->|multipart audio| R
+  T -->|MPEG audio| APIc
+```
+
